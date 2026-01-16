@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 from diary.forms import DiaryForm
@@ -16,7 +17,9 @@ class DiaryCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, "Запись создана ✅")
+        return response
 
 
 class DiaryListView(LoginRequiredMixin, ListView):
@@ -25,7 +28,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
     model = Diary
     template_name = "diary/diary_list.html"
     context_object_name = "entries"
-    paginate_by = 10
+    paginate_by = 9
 
     def get_queryset(self):
         return Diary.objects.filter(user=self.request.user).order_by("-created_at")
@@ -53,6 +56,11 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Diary.objects.filter(user=self.request.user)
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Запись обновлена ✅")
+        return response
+
 
 class DiaryDeleteView(LoginRequiredMixin, DeleteView):
     """Удаление дневниковой записи"""
@@ -63,3 +71,7 @@ class DiaryDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Diary.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.warning(self.request, "Запись удалена 🗑️")
+        return super().delete(request, *args, **kwargs)
