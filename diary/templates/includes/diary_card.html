@@ -1,0 +1,37 @@
+<div class="col">
+  <a href="{% url 'diary:diary_detail' entry.pk %}" class="text-decoration-none">
+    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+         style="
+           background-image:
+             linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+             url('https://images.unsplash.com/photo-1527259210153-c54f8e2d0172?auto=format&fit=crop&w=1200&q=60');
+           background-size: cover;
+           background-position: center;
+         ">
+      <div class="d-flex flex-column h-100 p-4 pb-3 text-white">
+        <h3 class="mt-5 mb-3 display-6 lh-1 fw-bold">
+          {{ entry.title|default:"(без заголовка)" }}
+        </h3>
+
+        <p class="text-white-50 mb-4">
+          {{ entry.note|truncatechars:120 }}
+        </p>
+
+        <ul class="d-flex list-unstyled mt-auto align-items-center">
+          <li class="me-auto">
+            <span class="badge text-bg-light text-dark">
+              {{ entry.created_at|date:"d.m.Y" }}
+            </span>
+            {% if entry.is_private %}
+              <span class="badge text-bg-secondary ms-2">приватно</span>
+            {% endif %}
+          </li>
+          <li class="d-flex align-items-center">
+            <small class="text-white-50">{{ entry.created_at|date:"H:i" }}</small>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </a>
+</div>
