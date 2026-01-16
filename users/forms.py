@@ -6,6 +6,7 @@ from users.models import User
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
+    """Форма для регистрации пользователя"""
     class Meta:
         model = User
         fields = ("email", "password1", "password2")
@@ -22,6 +23,7 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
+    """Форма для логина пользователя"""
     username = forms.EmailField(
         label="Email",
         widget=forms.EmailInput(attrs={
@@ -35,3 +37,13 @@ class LoginForm(AuthenticationForm):
             "placeholder": "Password",
         }),
     )
+
+
+class UserProfileForm(StyleFormMixin, forms.ModelForm):
+    """Форма для заполнения профиля пользователя"""
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "phone", "avatar", "sex", "date_of_birth")
+        widgets = {
+            "date_of_birth": forms.DateInput(attrs={"type": "date"}),
+        }
