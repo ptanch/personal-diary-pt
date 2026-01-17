@@ -10,6 +10,17 @@
 <div class="container px-0 py-4" id="custom-cards">
     <h2 class="pb-2 border-bottom">Последние записи</h2>
 
+    {% if q %}
+    <div class="d-flex align-items-center justify-content-between mt-3">
+        <div class="text-muted">
+            Результаты поиска: <span class="fw-semibold">“{{ q }}”</span>
+        </div>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'diary:diary_list' %}">
+            Сбросить
+        </a>
+    </div>
+    {% endif %}
+
     {% if entries %}
     <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
         {% for entry in entries %}
