@@ -1,45 +1,56 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom">
-    <div class="container">
-        <a class="navbar-brand fw-semibold" href="{% url 'diary:diary_list' %}">Personal Diary</a>
+  <div class="container">
+    <a class="navbar-brand fw-semibold" href="{% url 'diary:diary_list' %}">Personal Diary</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="nav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'diary:diary_list' %}">Мои записи</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'diary:diary_create' %}">Создать</a>
-                </li>
-                {% endif %}
-            </ul>
+    <div class="collapse navbar-collapse" id="nav">
 
-            <div class="d-flex align-items-center gap-2">
-                {% if user.is_authenticated %}
-                <span class="text-muted small">{{ user.email }}</span>
+      {% if user.is_authenticated %}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'diary:diary_list' %}">Мои записи</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'diary:diary_create' %}">Создать</a>
+          </li>
+        </ul>
 
-                <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
+        <form class="d-flex me-lg-3 my-2 my-lg-0" role="search" method="get" action="{% url 'diary:diary_list' %}">
+          <input
+            class="form-control form-control-sm me-2"
+            type="search"
+            name="q"
+            placeholder="Поиск по записям…"
+            value="{{ q|default:'' }}"
+            aria-label="Search"
+          >
+          <button class="btn btn-outline-secondary btn-sm" type="submit">Найти</button>
+        </form>
+      {% else %}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+      {% endif %}
 
-                <form method="post" action="{% url 'users:logout' %}" class="d-inline m-0 p-0">
-                    {% csrf_token %}
-                    <button
-                            type="submit"
-                            class="btn btn-outline-dark btn-sm"
-                            style="padding: .25rem .5rem;"
-                    >
-                        Выйти
-                    </button>
-                </form>
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+          <span class="text-muted small">{{ user.email }}</span>
 
-                {% else %}
-                <a class="btn btn-outline-dark btn-sm" href="{% url 'users:login' %}">Войти</a>
-                <a class="btn btn-dark btn-sm" href="{% url 'users:register' %}">Регистрация</a>
-                {% endif %}
-            </div>
-        </div>
+          <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
+
+          <form method="post" action="{% url 'users:logout' %}" class="d-inline m-0 p-0">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-dark btn-sm" style="padding: .25rem .5rem;">
+              Выйти
+            </button>
+          </form>
+        {% else %}
+          <a class="btn btn-outline-dark btn-sm" href="{% url 'users:login' %}">Войти</a>
+          <a class="btn btn-dark btn-sm" href="{% url 'users:register' %}">Регистрация</a>
+        {% endif %}
+      </div>
+
     </div>
+  </div>
 </nav>
