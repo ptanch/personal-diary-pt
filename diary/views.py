@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 from diary.forms import DiaryForm
@@ -31,7 +32,22 @@ class DiaryListView(LoginRequiredMixin, ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        return Diary.objects.filter(user=self.request.user).order_by("-created_at")
+        qs = Diary.objects.filter(user=self.request.user).order_by("-created_at")
+
+        q = (self.request.GET.get("q") or "").strip()
+        if q:
+            qs = qs.filter(
+                Q(title__icontains=q) | Q(note__icontains=q)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        """Метод для поисковой формы - отображает текущий поисковый запрос в поле ввода"""
+
+        context = super().get_context_data(**kwargs)
+        context["q"] = (self.request.GET.get("q") or "").strip()
+        return context
 
 
 class DiaryDetailView(LoginRequiredMixin, DetailView):
