@@ -15,11 +15,11 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
             "email": forms.EmailInput(attrs={"placeholder": "name@example.com"}),
         }
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-            self.fields["password1"].widget.attrs.setdefault("placeholder", "Password")
-            self.fields["password2"].widget.attrs.setdefault("placeholder", "Repeat password")
+        self.fields["password1"].widget.attrs.setdefault("placeholder", "Password")
+        self.fields["password2"].widget.attrs.setdefault("placeholder", "Repeat password")
 
 
 class LoginForm(AuthenticationForm):
