@@ -18,6 +18,11 @@ class DiaryForm(forms.ModelForm):
         }
 
     def clean_note(self):
+        """
+        Метод для проверки написанного:
+        нельзя сохранить пустую запись из пробелов
+        """
+
         note = (self.cleaned_data.get("note") or "").strip()
         if not note:
             raise forms.ValidationError("Запись не может быть пустой.")
