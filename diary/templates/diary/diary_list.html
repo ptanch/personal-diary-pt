@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Мои записи{% endblock %}
 
 {% block content %}
@@ -23,8 +24,9 @@
 
     {% if entries %}
     <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
-        {% for entry in entries %}
-        {% include "includes/diary_card.html" with entry=entry %}
+        {% for entry in object_list %}
+        {% cycle "bg-1.jpg" "bg-2.jpg" "bg-3.jpg" "bg-4.jpg" "bg-5.jpg" "bg-6.jpg" as bg silent %}
+        {% include "includes/diary_card.html" with entry=entry bg=bg %}
         {% endfor %}
     </div>
     {% else %}
