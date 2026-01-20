@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-personal_diary}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      args:
+        POETRY_VERSION: 2.0.1
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
+      - media:/app/media
+      - static:/app/staticfiles
+    ports:
+      - "8000:8000"
+    command: bash -lc "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  pg_data:
+  media:
+  static:
