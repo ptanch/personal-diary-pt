@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Удалить запись{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Удалить запись</h1>
+
+<div class="alert alert-warning">
+  Ты точно хочешь удалить запись
+  <strong>{{ object.title|default:"(без заголовка)" }}</strong>?
+  Это действие нельзя отменить.
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">Да, удалить</button>
+  <a class="btn btn-outline-secondary" href="{% url 'diary:diary_detail' object.pk %}">Отмена</a>
+</form>
+{% endblock %}
